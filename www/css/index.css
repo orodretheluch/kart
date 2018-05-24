@@ -47,7 +47,6 @@ body {
 
 /* Portrait layout (default) */
 .app {
-    background:url(../img/logo.png) no-repeat center top; /* 170px x 200px */
     position:absolute;             /* position in the center of the screen */
     left:50%;
     top:50%;
@@ -112,4 +111,136 @@ h1 {
 .blink {
     animation:fade 3000ms infinite;
     -webkit-animation:fade 3000ms infinite;
+}
+.barcode-scanner-wrap {
+    margin: 0;
+    padding: 0;
+    outline: 0;
+    font-size: 100%;
+    vertical-align: baseline;
+    background: 0 0 red;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 50%;
+    height: 50%;
+    z-index: 999;
+    -ms-user-select: none;
+}
+
+.barcode-scanner-preview {
+    width: auto;
+    height: calc(100% - 70px);
+    position: absolute;
+    top: calc(50% - 35px);
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+}
+
+.barcode-scanner-mark {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 100%;
+    height: 3px;
+    background: green;
+    z-index: 999;
+}
+
+.barcode-scanner-app-bar {
+    height: 70px;
+    width: 100%;
+    padding-top: 10px;
+    z-index: 999;
+    text-align: center;
+    user-select: none;
+    position: absolute;
+    bottom: 0px;
+}
+
+.app-bar-action {
+    width: 40px;
+    height: 40px;
+    margin: 0 auto;
+    font-family: "Segoe UI Symbol";
+    color: white;
+    font-size: 12px;
+    text-transform: lowercase;
+    text-align: center;
+    cursor: default;
+}
+
+@media all and (orientation: landscape) {
+    .app-bar-action {
+        float: right;
+        margin-right: 20px;
+    }
+}
+
+.app-bar-action::before {
+    font-size: 28px;
+    display: block;
+    height: 36px;
+}
+
+.action-close::before {
+    content: "\E0C7";
+    /* close icon is larger so we re-size it to fit other icons */
+    font-size: 20px;
+    line-height: 40px;
+}
+
+.action-close:hover::before {
+    content: "\E0CA";
+}
+
+.no-zoom {
+    -ms-content-zooming: none;
+}
+
+.no-scroll {
+    overflow: hidden;
+}
+.btngr {
+  background: #11c24f;
+  background-image: -webkit-linear-gradient(top, #11c24f, #138a3d);
+  background-image: -moz-linear-gradient(top, #11c24f, #138a3d);
+  background-image: -ms-linear-gradient(top, #11c24f, #138a3d);
+  background-image: -o-linear-gradient(top, #11c24f, #138a3d);
+  background-image: linear-gradient(to bottom, #11c24f, #138a3d);
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0px;
+  font-family: Arial;
+  color: #ffffff;
+  font-size: 38px;
+  padding: 200px;
+  text-decoration: none;
+  opacity:0.5;
+}
+
+.btngr:hover {
+  text-decoration: none;
+}
+
+.btnck {
+  background: #cf480f;
+  background-image: -webkit-linear-gradient(top, #cf480f, #cc0e0e);
+  background-image: -moz-linear-gradient(top, #cf480f, #cc0e0e);
+  background-image: -ms-linear-gradient(top, #cf480f, #cc0e0e);
+  background-image: -o-linear-gradient(top, #cf480f, #cc0e0e);
+  background-image: linear-gradient(to bottom, #cf480f, #cc0e0e);
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0px;
+  font-family: Arial;
+  color: #ffffff;
+  font-size: 38px;
+  padding: 200px;
+  text-decoration: none;
+  opacity:0.5;
+}
+
+.btnck:hover {
+  text-decoration: none;
 }

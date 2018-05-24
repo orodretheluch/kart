@@ -40,20 +40,230 @@
 
     <link rel="stylesheet" type="text/css" href="css/index.css" />
     <title>Hello World</title>
+		<script>
+		 var  sqdb; 
+		  var items = [];
+    function onDeviceReady () {
+     //alert("Calling onDeviceReady()");
+	  sqdb = window.sqlitePlugin.openDatabase({
+    name: 'kartdb.db',
+    location: 'default',
+  });
+    }
+
+  
+</script>
 </head>
 
-<body>
-    <div class="app">
-        <h1>PhoneGap</h1>
-        <div id="deviceready" class="blink">
-            <p class="event listening">Connecting to Device</p>
-            <p class="event received">Device is Ready</p>
-        </div>
+<body style="background:url('img/bg.jpg') no-repeat">
+<div style="position:absolute;float:left;left:170px;width:100%;z-index:9999999;">
+	<img style="width:20%" src="img/belediye.png">
+</div>
+<div style="position:absolute;float:left;left:750px;width:100%;z-index:9999999;">
+				<div style="float:left;text-align: center;">
+				<span id="date" style="text-align:center;font-size: 80px;">
+						
+				</span>
+				<br>
+				<span id="saat" style="text-align:center;font-size: 100px;">
+					
+				</span>
+			</div>
+			</div>
+
+
+<div>
+<button class="btngr" onclick="getDataDB();">GETDB</button>
+<button class="btngr" onclick="sendDB();">GONDER</button>
+</div>
+    <div>
+     <div style="position:absolute;top:250px;left:50px;"> 
+		<button class="btngr" onclick="scan();">GİRİŞ</button>
+	</div>
+
+	<div style="position:absolute;top:250px;left:720px;">
+		<button class="btnck" onclick="scan();">ÇIKIŞ</button>
+	</div>
     </div>
     <script type="text/javascript" src="cordova.js"></script>
     <script type="text/javascript" src="js/index.js"></script>
     <script type="text/javascript">
         app.initialize();
+				var myVar = setInterval(myTimer, 1000);
+		function myTimer() {
+		var d = new Date();
+		document.getElementById("saat").innerHTML = d.toLocaleTimeString();
+		document.getElementById("date").innerHTML = d.toLocaleDateString();	
+		
+}
+	var myVar1 = setInterval(myTimer1, 300000);
+		function myTimer1() {		
+		checkConnection();
+}
+				$(document).ready(function() {
+
+ 
+
+
+
+//Math.round(new Date().getTime()/1000)
+
+
+
+		
+});
+		function scan()
+		{
+			 cordova.plugins.barcodeScanner.scan(
+      function (result) {
+	  
+			sqdb.transaction(function(tx) {
+    tx.executeSql('CREATE TABLE IF NOT EXISTS giriscikis (id INTEGER PRIMARY KEY AUTOINCREMENT, kid INTEGER, saat INTEGER)');
+    tx.executeSql('INSERT INTO giriscikis (kid,saat) VALUES (?,?)', [parseInt(text),Math.round(new Date().getTime()/1000)]);
+  }, function(error) {
+    console.log('Transaction ERROR: ' + error.message);
+  }, function() {
+    console.log('Populated database OK');
+	alert('Populated database OK');
+  });
+  
+          
+      },
+      function (error) {
+          alert("Scanning failed: " + error);
+      },
+      {
+          preferFrontCamera : true, // iOS and Android
+          showFlipCameraButton : false, // iOS and Android
+          showTorchButton : false, // iOS and Android
+          torchOn: false, // Android, launch with the torch switched on (if available)
+          saveHistory: false, // Android, save scan history (default false)
+          prompt : "aa", // Android
+          resultDisplayDuration: 500, // Android, display scanned text for X ms. 0 suppresses it entirely, default 1500
+          formats : "QR_CODE", // default: all but PDF_417 and RSS_EXPANDED
+          orientation : "landscape", // Android only (portrait|landscape), default unset so it rotates with the device
+          disableAnimations : true, // iOS
+          disableSuccessBeep: true // iOS and Android
+      }
+   );
+		}
+		
+		
+		
+		function getDataDB()
+	{
+	dbjson="";
+		sqdb.transaction(function(tx) {
+        tx.executeSql("select id as cnttt, kid as cntt, saat as cnt from giriscikis order by id asc;", [], function(tx, res) {          
+		dbjson='[';
+		sondd=0;
+		  for(var i=0;i<res.rows.length;i++)
+		  {
+			if(i==(res.rows.length-1))
+			{
+					dbjson+='{"dd":'+res.rows.item(i).cnttt+',"kisi":'+res.rows.item(i).cntt+',"saat":'+res.rows.item(i).cnt+',"cihaz":'+cihazKOD+'}';				
+			}
+			else
+			{
+					dbjson+='{"dd":'+res.rows.item(i).cnttt+',"kisi":'+res.rows.item(i).cntt+',"saat":'+res.rows.item(i).cnt+',"cihaz":'+cihazKOD+'},';					
+			}
+			sondd=res.rows.item(i).cnttt;
+		  }
+		dbjson+=']';  
+        });
+      });
+	  console.log(dbjson);
+	}
+	 function delDataDB(asdf)
+	{
+		sqdb.transaction(function(tx) {
+    
+    tx.executeSql('DELETE FROM giriscikis where id<=?', [asdf]);
+  }, function(error) {
+    console.log('Transaction ERROR: ' + error.message);
+  }, function() {
+    console.log('delete database OK');
+	dbjson="";
+  });
+	}
+function sendDB()
+	{
+		//ajax
+		
+		$.ajax({
+    url: 'http://82.222.226.171/QRCard/setValue.php',
+    type: 'POST',
+    dataType: 'text',
+    success: function(data) {	
+		 delDataDB(data);
+		 console.log(data);
+	},
+    error: function(jqXHR, textStatus, errorThrown) {
+        console.log(textStatus);
+        console.log(errorThrown);
+    },
+    data: {'dbjss': dbjson}
+    
+});	
+	//ajax son
+		
+	}
+            function checkConnection() {
+  /*make sure you host a helloWorld HTML page in the following URL, so that requests are succeeded with 200 status code*/
+  getDataDB();
+                var url = "http://82.222.226.171/QRCard/Chk.php" ; 
+                $.ajax({
+                    url: url,
+                    type: "get",
+                    cache: false,
+                    dataType: 'jsonp', // it is for supporting crossdomain
+                    crossDomain : true,
+                    asynchronous : false,
+                    jsonpCallback: 'deadCode',
+                    timeout : 1500, // set a timeout in milliseconds
+                    complete : function(xhr, responseText, thrownError) {
+                        if(xhr.status == "200") {
+                         console.log("cevap"+xhr.status);
+                           sendDB();
+                        }
+                        else {
+                        
+                          console.log("Erişim Yok");
+                        }
+                    }
+               });
+            }
+   function getKisi()
+   {
+   var neededData; 
+	
+	sqdb.transaction(function(tx) {
+    
+    tx.executeSql('DELETE FROM kisiler', []);
+  }, function(error) {
+    console.log('Transaction ERROR: ' + error.message);
+  }, function() {
+    console.log('delete database OK');
+	
+	$.getJSON('http://82.222.226.171/QRCard/setKisiler.php', function(data) {
+		 $.each(data, function(idx, val) {						
+			sqdb.transaction(function(tx) {
+    tx.executeSql('CREATE TABLE IF NOT EXISTS kisiler (id INTEGER PRIMARY KEY AUTOINCREMENT, kid INTEGER, kad TEXT, ksad TEXT)');
+    tx.executeSql('INSERT INTO kisiler (kid,kad,ksad) VALUES (?,?,?)', [val.id,val.ad,val.soyad]);
+  }, function(error) {
+    console.log('Transaction ERROR: ' + error.message);
+  }, function() {
+    console.log('Populated database OK');
+  });
+			
+			
+		});
+	}); 
+	
+  });
+
+	 
+   }
     </script>
 </body>
 

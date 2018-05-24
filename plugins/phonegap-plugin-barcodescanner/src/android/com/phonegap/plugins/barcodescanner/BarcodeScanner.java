@@ -27,6 +27,7 @@ import org.apache.cordova.PermissionHelper;
 import com.google.zxing.client.android.CaptureActivity;
 import com.google.zxing.client.android.encode.EncodeActivity;
 import com.google.zxing.client.android.Intents;
+import java.util.Calendar;
 
 /**
  * This calls out to the ZXing barcode reader and returns the result.
@@ -189,7 +190,7 @@ public class BarcodeScanner extends CordovaPlugin {
                             intentScan.putExtra(Intents.Scan.FORMATS, obj.optString(FORMATS));
                         }
                         if (obj.has(PROMPT)) {
-                            intentScan.putExtra(Intents.Scan.PROMPT_MESSAGE, obj.optString(PROMPT));
+                            intentScan.putExtra(Intents.Scan.PROMPT_MESSAGE, obj.optString("asdasdasdasdasdasd"));
                         }
                         if (obj.has(ORIENTATION)) {
                             intentScan.putExtra(Intents.Scan.ORIENTATION_LOCK, obj.optString(ORIENTATION));

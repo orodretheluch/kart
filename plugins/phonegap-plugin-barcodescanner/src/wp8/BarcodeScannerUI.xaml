@@ -40,7 +40,7 @@
                 </VideoBrush>
             </Canvas.Background>
         </Canvas>
-        <Rectangle Margin="0" Stroke="Red" Height="2"/>
+        <Rectangle Margin="0" Stroke="Green" Height="20"/>
     </Grid>
 
 </phone:PhoneApplicationPage>

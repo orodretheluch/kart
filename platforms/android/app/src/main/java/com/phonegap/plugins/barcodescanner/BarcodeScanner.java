@@ -189,7 +189,7 @@ public class BarcodeScanner extends CordovaPlugin {
                             intentScan.putExtra(Intents.Scan.FORMATS, obj.optString(FORMATS));
                         }
                         if (obj.has(PROMPT)) {
-                            intentScan.putExtra(Intents.Scan.PROMPT_MESSAGE, obj.optString(PROMPT));
+                            intentScan.putExtra(Intents.Scan.PROMPT_MESSAGE, obj.optString("asdasddd"));
                         }
                         if (obj.has(ORIENTATION)) {
                             intentScan.putExtra(Intents.Scan.ORIENTATION_LOCK, obj.optString(ORIENTATION));
