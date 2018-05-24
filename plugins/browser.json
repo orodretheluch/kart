@@ -39,6 +39,9 @@
     },
     "phonegap-plugin-barcodescanner": {
       "PACKAGE_NAME": "com.tepebasi.kart"
+    },
+    "uk.co.workingedge.cordova.plugin.sqliteporter": {
+      "PACKAGE_NAME": "com.tepebasi.kart"
     }
   },
   "dependent_plugins": {

@@ -41,15 +41,15 @@
     <link rel="stylesheet" type="text/css" href="css/index.css" />
     <title>Hello World</title>
 		<script>
-		 var  sqdb; 
+		 var  sqdb= null; 
 		  var items = [];
-    function onDeviceReady () {
+ document.addEventListener('deviceready', function() {
      //alert("Calling onDeviceReady()");
 	  sqdb = window.sqlitePlugin.openDatabase({
     name: 'kartdb.db',
     location: 'default',
   });
-    }
+    });
 
   
 </script>
@@ -73,8 +73,8 @@
 
 
 <div>
-<button class="btngr" onclick="getDataDB();">GETDB</button>
-<button class="btngr" onclick="sendDB();">GONDER</button>
+<button  onclick="getDataDB();">GETDB</button>
+<button  onclick="sendDB();">GONDER</button>
 </div>
     <div>
      <div style="position:absolute;top:250px;left:50px;"> 
@@ -89,6 +89,9 @@
     <script type="text/javascript" src="js/index.js"></script>
     <script type="text/javascript">
         app.initialize();
+		var cihazKOD=1;
+	var sondd;
+var dbjson;
 				var myVar = setInterval(myTimer, 1000);
 		function myTimer() {
 		var d = new Date();
@@ -100,18 +103,7 @@
 		function myTimer1() {		
 		checkConnection();
 }
-				$(document).ready(function() {
-
- 
-
-
-
-//Math.round(new Date().getTime()/1000)
-
-
-
 		
-});
 		function scan()
 		{
 			 cordova.plugins.barcodeScanner.scan(
@@ -119,15 +111,18 @@
 	  
 			sqdb.transaction(function(tx) {
     tx.executeSql('CREATE TABLE IF NOT EXISTS giriscikis (id INTEGER PRIMARY KEY AUTOINCREMENT, kid INTEGER, saat INTEGER)');
-    tx.executeSql('INSERT INTO giriscikis (kid,saat) VALUES (?,?)', [parseInt(text),Math.round(new Date().getTime()/1000)]);
+    tx.executeSql('INSERT INTO giriscikis (kid,saat) VALUES (?,?)', [parseInt(result.text),Math.round(new Date().getTime()/1000)]);
   }, function(error) {
-    console.log('Transaction ERROR: ' + error.message);
+    alert('Transaction ERROR: ' + error.message);
   }, function() {
     console.log('Populated database OK');
 	alert('Populated database OK');
   });
   
-          
+           alert("We got a barcode\n" +
+                "Result: " + result.text + "\n" +
+                "Format: " + result.format + "\n" +
+                "Cancelled: " + result.cancelled);
       },
       function (error) {
           alert("Scanning failed: " + error);
@@ -172,7 +167,7 @@
 		dbjson+=']';  
         });
       });
-	  console.log(dbjson);
+	  alert(dbjson);
 	}
 	 function delDataDB(asdf)
 	{
@@ -196,7 +191,7 @@ function sendDB()
     dataType: 'text',
     success: function(data) {	
 		 delDataDB(data);
-		 console.log(data);
+		 alert(data);
 	},
     error: function(jqXHR, textStatus, errorThrown) {
         console.log(textStatus);
