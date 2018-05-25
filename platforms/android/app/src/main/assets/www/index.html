@@ -45,10 +45,7 @@
 		  var items = [];
  document.addEventListener('deviceready', function() {
      //alert("Calling onDeviceReady()");
-	  sqdb = window.sqlitePlugin.openDatabase({
-    name: 'kartdb.db',
-    location: 'default',
-  });
+	  sqdb = window.openDatabase("kartdb", "1.0", "kartdb", 1 * 1024);
     });
 
   
@@ -73,8 +70,7 @@
 
 
 <div>
-<button  onclick="getDataDB();">GETDB</button>
-<button  onclick="sendDB();">GONDER</button>
+
 </div>
     <div>
      <div style="position:absolute;top:250px;left:50px;"> 
@@ -87,12 +83,19 @@
     </div>
     <script type="text/javascript" src="cordova.js"></script>
     <script type="text/javascript" src="js/index.js"></script>
+			<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
     <script type="text/javascript">
         app.initialize();
 		var cihazKOD=1;
 	var sondd;
 var dbjson;
-				var myVar = setInterval(myTimer, 1000);
+	
+	$(document).ready(function() {
+
+ 
+
+
+		var myVar = setInterval(myTimer, 1000);
 		function myTimer() {
 		var d = new Date();
 		document.getElementById("saat").innerHTML = d.toLocaleTimeString();
@@ -103,26 +106,40 @@ var dbjson;
 		function myTimer1() {		
 		checkConnection();
 }
+
+
+
+		
+});
 		
 		function scan()
 		{
 			 cordova.plugins.barcodeScanner.scan(
       function (result) {
 	  
-			sqdb.transaction(function(tx) {
-    tx.executeSql('CREATE TABLE IF NOT EXISTS giriscikis (id INTEGER PRIMARY KEY AUTOINCREMENT, kid INTEGER, saat INTEGER)');
-    tx.executeSql('INSERT INTO giriscikis (kid,saat) VALUES (?,?)', [parseInt(result.text),Math.round(new Date().getTime()/1000)]);
-  }, function(error) {
-    alert('Transaction ERROR: ' + error.message);
-  }, function() {
-    console.log('Populated database OK');
-	alert('Populated database OK');
-  });
-  
-           alert("We got a barcode\n" +
-                "Result: " + result.text + "\n" +
-                "Format: " + result.format + "\n" +
-                "Cancelled: " + result.cancelled);
+	  var sql = "CREATE TABLE IF NOT EXISTS giriscikis ([id] INTEGER PRIMARY KEY AUTOINCREMENT, [kid] INTEGER, [saat] INTEGER);"+
+    "INSERT INTO giriscikis(kid,saat) VALUES ("+parseInt(result.text)+","+Math.round(new Date().getTime()/1000)+");";
+var successFn = function(count){
+    sqdb.transaction(function(tx) {
+        tx.executeSql("select kad as cnt, ksad as cntt from kisiler where kid=?;", [parseInt(result.text)], function(tx, res) {          
+		  		
+			alert("İyi Çalışmalar "+res.rows.item(0).cnt+" "+res.rows.item(0).cntt);
+		 
+        });
+      });
+};
+var errorFn = function(error){
+    alert("The following error occurred: "+error.message);
+};
+var progressFn = function(current, total){
+     alert("Imported "+current+"/"+total+" statements");
+};
+cordova.plugins.sqlitePorter.importSqlToDb(sqdb, sql, {
+    successFn: successFn,
+    errorFn: errorFn,
+    progressFn: progressFn
+});
+
       },
       function (error) {
           alert("Scanning failed: " + error);
@@ -241,23 +258,29 @@ function sendDB()
     console.log('delete database OK');
 	
 	$.getJSON('http://82.222.226.171/QRCard/setKisiler.php', function(data) {
+	
 		 $.each(data, function(idx, val) {						
-			sqdb.transaction(function(tx) {
-    tx.executeSql('CREATE TABLE IF NOT EXISTS kisiler (id INTEGER PRIMARY KEY AUTOINCREMENT, kid INTEGER, kad TEXT, ksad TEXT)');
-    tx.executeSql('INSERT INTO kisiler (kid,kad,ksad) VALUES (?,?,?)', [val.id,val.ad,val.soyad]);
-  }, function(error) {
-    console.log('Transaction ERROR: ' + error.message);
-  }, function() {
-    console.log('Populated database OK');
-  });
-			
+	console.log(val.ad);
+			 var sql = "CREATE TABLE IF NOT EXISTS kisiler ([kid] INTEGER, [kad] TEXT, [ksad] TEXT);"+"INSERT INTO kisiler (kid,kad,ksad) VALUES ("+val.id+",'"+val.ad+"','"+val.soyad+"');";
+var successFn = function(count){
+    console.log(val.id+","+val.ad+","+val.soyad);
+};
+var errorFn = function(error){
+    console.log("The following error occurred: "+error.message);
+};
+var progressFn = function(current, total){
+     console.log("Imported "+current+"/"+total+" statements");
+};
+cordova.plugins.sqlitePorter.importSqlToDb(sqdb, sql, {
+    successFn: successFn,
+    errorFn: errorFn,
+    progressFn: progressFn
+});
 			
 		});
 	}); 
 	
-  });
-
-	 
+  });	 
    }
     </script>
 </body>
