@@ -46,47 +46,9 @@
  document.addEventListener('deviceready', function() {
      //alert("Calling onDeviceReady()");
 	  sqdb = window.openDatabase("kartdb", "1.0", "kartdb", 1 * 1024);
-    });
-
-  
-</script>
-</head>
-
-<body style="background:url('img/bg.jpg') no-repeat">
-<div style="position:absolute;float:left;left:170px;width:100%;z-index:9999999;">
-	<img style="width:20%" src="img/belediye.png">
-</div>
-<div style="position:absolute;float:left;left:750px;width:100%;z-index:9999999;">
-				<div style="float:left;text-align: center;">
-				<span id="date" style="text-align:center;font-size: 80px;">
-						
-				</span>
-				<br>
-				<span id="saat" style="text-align:center;font-size: 100px;">
-					
-				</span>
-			</div>
-			</div>
-
-
-<div>
-
-</div>
-    <div>
-     <div style="position:absolute;top:250px;left:50px;"> 
-		<button class="btngr" onclick="scan();">GİRİŞ</button>
-	</div>
-
-	<div style="position:absolute;top:250px;left:720px;">
-		<button class="btnck" onclick="scan();">ÇIKIŞ</button>
-	</div>
-    </div>
-    <script type="text/javascript" src="cordova.js"></script>
-    <script type="text/javascript" src="js/index.js"></script>
-			<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
-    <script type="text/javascript">
-        app.initialize();
-		var cihazKOD=1;
+	  
+	  
+	  var cihazKOD=1;
 	var sondd;
 var dbjson;
 	
@@ -282,6 +244,48 @@ cordova.plugins.sqlitePorter.importSqlToDb(sqdb, sql, {
 	
   });	 
    }
+	  
+    });
+
+  
+</script>
+</head>
+
+<body style="background:url('img/bg.jpg') no-repeat">
+<div style="position:absolute;float:left;left:170px;width:100%;z-index:9999999;">
+	<img style="width:20%" src="img/belediye.png">
+</div>
+<div style="position:absolute;float:left;left:750px;width:100%;z-index:9999999;">
+				<div style="float:left;text-align: center;">
+				<span id="date" style="text-align:center;font-size: 80px;">
+						
+				</span>
+				<br>
+				<span id="saat" style="text-align:center;font-size: 100px;">
+					
+				</span>
+			</div>
+			</div>
+
+
+<div>
+
+</div>
+    <div>
+     <div style="position:absolute;top:250px;left:50px;"> 
+		<button class="btngr" onclick="scan();">GİRİŞ</button>
+	</div>
+
+	<div style="position:absolute;top:250px;left:720px;">
+		<button class="btnck" onclick="scan();">ÇIKIŞ</button>
+	</div>
+    </div>
+    <script type="text/javascript" src="cordova.js"></script>
+    <script type="text/javascript" src="js/index.js"></script>
+			<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript">
+        app.initialize();
+		
     </script>
 </body>
 
