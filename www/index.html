@@ -44,7 +44,7 @@
 		 var  sqdb= null; 
 		  var items = [];
  document.addEventListener('deviceready', function() {
-     //alert("Calling onDeviceReady()");
+     //console.log("Calling onDeviceReady()");
 	  sqdb = window.openDatabase("kartdb", "1.0", "kartdb", 1 * 1024);
 	  
 	  
@@ -91,10 +91,10 @@ var successFn = function(count){
       });
 };
 var errorFn = function(error){
-    alert("The following error occurred: "+error.message);
+    console.log("The following error occurred: "+error.message);
 };
 var progressFn = function(current, total){
-     alert("Imported "+current+"/"+total+" statements");
+     console.log("Imported "+current+"/"+total+" statements");
 };
 cordova.plugins.sqlitePorter.importSqlToDb(sqdb, sql, {
     successFn: successFn,
@@ -104,7 +104,7 @@ cordova.plugins.sqlitePorter.importSqlToDb(sqdb, sql, {
 
       },
       function (error) {
-          alert("Scanning failed: " + error);
+          console.log("Scanning failed: " + error);
       },
       {
           preferFrontCamera : true, // iOS and Android
@@ -146,7 +146,7 @@ cordova.plugins.sqlitePorter.importSqlToDb(sqdb, sql, {
 		dbjson+=']';  
         });
       });
-	  alert(dbjson);
+	  console.log(dbjson);
 	}
 	 function delDataDB(asdf)
 	{
@@ -170,7 +170,7 @@ function sendDB()
     dataType: 'text',
     success: function(data) {	
 		 delDataDB(data);
-		 alert(data);
+		 console.log(data);
 	},
     error: function(jqXHR, textStatus, errorThrown) {
         console.log(textStatus);
@@ -252,10 +252,10 @@ cordova.plugins.sqlitePorter.importSqlToDb(sqdb, sql, {
 </head>
 
 <body style="background:url('img/bg.jpg') no-repeat">
-<div style="position:absolute;float:left;left:170px;width:100%;z-index:9999999;">
+<div style="position:absolute;float:left;left:170px;z-index:9999999;">
 	<img style="width:20%" src="img/belediye.png">
 </div>
-<div style="position:absolute;float:left;left:750px;width:100%;z-index:9999999;">
+<div style="position:absolute;float:left;left:750px;z-index:9999999;">
 				<div style="float:left;text-align: center;">
 				<span id="date" style="text-align:center;font-size: 80px;">
 						
